@@ -1,0 +1,17 @@
+services:
+  web:
+    build: .
+    ports:
+      - "${FLASK_PORT}:${FLASK_PORT}"
+    environment:
+      - REDIS_HOST=redis
+      - BYBIT_API_KEY=${BYBIT_API_KEY}
+      - BYBIT_API_SECRET=${BYBIT_API_SECRET}
+      - BOT_API_KEY=${BOT_API_KEY}
+      - FLASK_HOST=${FLASK_HOST}
+      - FLASK_PORT=${FLASK_PORT}
+      - REDIS_PORT=${REDIS_PORT}
+    volumes:
+      - .:/bybit_trade_entry_bot
+  redis:
+    image: "redis:alpine"
