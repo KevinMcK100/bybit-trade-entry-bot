@@ -6,6 +6,7 @@ services:
     restart: always
     environment:
       - REDIS_HOST=redis
+      - BYBIT_EXCHANGE_URL=${BYBIT_EXCHANGE_URL}
       - BYBIT_API_KEY=${BYBIT_API_KEY}
       - BYBIT_API_SECRET=${BYBIT_API_SECRET}
       - BOT_API_KEY=${BOT_API_KEY}
