@@ -7,7 +7,7 @@ from pybit import usdt_perpetual
 from models import TradesDao
 from price_cache import PriceCache
 
-BYBIT_TESTNET_EXCHANGE = bool(os.getenv("BYBIT_TESTNET_EXCHANGE", True))
+BYBIT_TESTNET_EXCHANGE = bool(os.getenv("BYBIT_TESTNET_EXCHANGE").lower() in ('true'))
 BYBIT_API_KEY = os.getenv("BYBIT_API_KEY")
 BYBIT_API_SECRET = os.getenv("BYBIT_API_SECRET")
 
