@@ -8,14 +8,16 @@ from typing import List
 
 from flask import Flask, jsonify, request
 
+from invalid_request import InvalidRequest
 from models import Schema, TradesDao
 from price_cache import PriceCache
+from request_validation import validate_conditional_order_request
 from rest_service import RestService
 from strategy import Strategy
 from websocket_streams import WebsocketStreams
 
 FLASK_HOST = os.environ.get('FLASK_HOST', '0.0.0.0')
-FLASK_PORT = os.environ.get('FLASK_PORT', 5000)
+FLASK_PORT = os.environ.get('FLASK_PORT', 8888)
 
 logging.basicConfig(filename="tradebot.log", level=logging.INFO,
                     format="%(asctime)s %(levelname)s %(message)s")
@@ -52,6 +54,10 @@ def list_trade():
 @app.route("/trade", methods=["POST"])
 @require_api_key
 def create_trade():
+    errors = validate_conditional_order_request(request)
+    if errors is not None:
+        print(errors)
+        raise InvalidRequest(errors)
     return jsonify(RestService().create(request.get_json()))
 
 
@@ -69,6 +75,12 @@ def get_item(item_id):
 @require_api_key
 def delete_item(item_id):
     return jsonify(RestService().delete(item_id))
+
+@app.errorhandler(InvalidRequest)
+def handle_invalid_usage(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    return response
 
 def print_cache(prices: PriceCache):
     while True:

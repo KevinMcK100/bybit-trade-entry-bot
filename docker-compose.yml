@@ -3,11 +3,13 @@ services:
     build: .
     ports:
       - "${FLASK_PORT}:${FLASK_PORT}"
+    restart: always
     environment:
       - REDIS_HOST=redis
       - BYBIT_API_KEY=${BYBIT_API_KEY}
       - BYBIT_API_SECRET=${BYBIT_API_SECRET}
       - BOT_API_KEY=${BOT_API_KEY}
+      - FLASK_ENV=${FLASK_ENV}
       - FLASK_HOST=${FLASK_HOST}
       - FLASK_PORT=${FLASK_PORT}
       - REDIS_PORT=${REDIS_PORT}

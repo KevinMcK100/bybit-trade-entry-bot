@@ -10,4 +10,10 @@ RUN pip3 install -r requirements.txt
 
 COPY . .
 
-CMD [ "python3", "-m" , "main"]
+ARG FLASK_HOST
+ARG FLASK_PORT
+ARG FLASK_ENV
+
+ENV FLASK_ENV=${FLASK_ENV}
+
+ENTRYPOINT python3 -m main

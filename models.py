@@ -16,20 +16,20 @@ class Schema:
 
         query = """
         CREATE TABLE IF NOT EXISTS "trades" (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          symbol TEXT,
-          side TEXT,
-          quantity REAL,
-          open_at REAL,
-          trigger_at REAL,
-          sl_price REAL,
-          tp_price REAL,
-          created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-          max_sl_count INTEGER DEFAULT 1,
-          sl_counter INTEGER DEFAULT 0,
-          is_active BOOLEAN DEFAULT 1,
-          is_position_open BOOLEAN DEFAULT 0,
-          is_conditional_open BOOLEAN DEFAULT 0
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            symbol TEXT,
+            side TEXT,
+            quantity REAL,
+            open_conditional_price REAL,
+            trigger_price REAL,
+            sl_price REAL,
+            tp_price REAL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            max_sl_count INTEGER DEFAULT 1,
+            sl_counter INTEGER DEFAULT 0,
+            is_active BOOLEAN DEFAULT 1,
+            is_position_open BOOLEAN DEFAULT 0,
+            is_conditional_open BOOLEAN DEFAULT 0
         );
         """
         c = self.conn.cursor()
@@ -55,9 +55,9 @@ class TradesDao:
         return dict(result)
 
     def create(self, params) -> dict:
-        trade = (params.get("symbol"), params.get("side"), params.get("quantity"), params.get("open_at"), params.get("trigger_at"), params.get("sl_price"), params.get("tp_price"), params.get("max_sl_count", 1))
+        trade = (params.get("symbol"), params.get("side"), params.get("quantity"), params.get("open_conditional_price"), params.get("trigger_price"), params.get("sl_price"), params.get("tp_price"), params.get("max_sl_count", 1))
         c = self.conn.cursor()
-        insert_result = c.execute('insert into trades (symbol, side, quantity, open_at, trigger_at, sl_price, tp_price, max_sl_count) values (?,?,?,?,?,?,?,?)', trade)
+        insert_result = c.execute('insert into trades (symbol, side, quantity, open_conditional_price, trigger_price, sl_price, tp_price, max_sl_count) values (?,?,?,?,?,?,?,?)', trade)
         self.conn.commit()
         return self.get_by_id(insert_result.lastrowid)
 

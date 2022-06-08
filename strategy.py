@@ -33,7 +33,7 @@ class Strategy:
                 if price is None:
                     continue
                 current_price = float(price)
-                target_price = float(open_conditional["open_at"])
+                target_price = float(open_conditional["open_conditional_price"])
                 side = str(open_conditional["side"]).lower().capitalize()
                 condition_met = False
                 if side == "Buy":
@@ -45,7 +45,7 @@ class Strategy:
                 if condition_met:
                     # In case websockets fail for whatever reason, we should double check we don't already have the position or conditional in place
                     qty = float(open_conditional["quantity"])
-                    conditional_price = float(open_conditional["trigger_at"])
+                    conditional_price = float(open_conditional["trigger_price"])
                     is_valid_to_enter = self.__is_valid_entry(symbol, side, qty, conditional_price)
                     if is_valid_to_enter:
                         self.__place_order(symbol, side, qty, conditional_price, open_conditional)
