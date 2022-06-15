@@ -131,7 +131,7 @@ class WebsocketStreams:
                         self.trades_dao.deactivate_trade(row_id)
                 # If it's a StopLoss order, then increment the SL count in the DB
                 elif "Filled" in order_status:
-                    logging.info("Received update for FILLED order of type: %s. Will increment StopLoss counter", create_type)
+                    logging.info("Received update for FILLED order of type: %s", create_type)
                     for matching_trade in matching_trades:
                         row_id = matching_trade["id"]
                         logging.info("Incrementing SL counter for trade ID: %s", row_id)
