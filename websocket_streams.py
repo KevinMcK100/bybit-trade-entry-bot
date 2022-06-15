@@ -18,7 +18,6 @@ class WebsocketStreams:
         self.trades_dao = trades_dao
         self.active_symbols = set()
         self.prices = {}
-        self.websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET)
 
     def subscribe_to_price_stream(self, symbols: List[str]):
         for symbol in symbols:
@@ -27,13 +26,19 @@ class WebsocketStreams:
             self.subscribe(symbol=symbol)
         return self.active_symbols
     
-    def subscribe(self, symbol):
-        self.websocket.instrument_info_stream(self.__handle_instrument_info, symbol)
+    def subscribe(self, symbol: str):
+        websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET)
+        websocket.instrument_info_stream(self.__handle_instrument_info, symbol)
 
     def start_position_listener(self):
-        self.websocket.position_stream(self.__handle_position_update)
-        self.websocket.stop_order_stream(self.__handle_stop_order_update)
-        self.websocket.order_stream(self.__handle_order_update)
+        position_websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET)
+        position_websocket.position_stream(self.__handle_position_update)
+        
+        stop_order_websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET)
+        stop_order_websocket.stop_order_stream(self.__handle_stop_order_update)
+        
+        order_websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET)
+        order_websocket.order_stream(self.__handle_order_update)
 
     def __handle_instrument_info(self, message):
         try:
