@@ -10,7 +10,7 @@ from price_cache import PriceCache
 BYBIT_TESTNET_EXCHANGE = bool(os.getenv("BYBIT_TESTNET_EXCHANGE").lower() in ('true'))
 BYBIT_API_KEY = os.getenv("BYBIT_API_KEY")
 BYBIT_API_SECRET = os.getenv("BYBIT_API_SECRET")
-BYBIT_EXCHANGE_DOMAIN = "bytick"
+BYBIT_EXCHANGE_DOMAIN = "bybit"
 
 class WebsocketStreams:
 
