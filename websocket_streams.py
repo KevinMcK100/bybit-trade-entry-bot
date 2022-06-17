@@ -10,6 +10,7 @@ from price_cache import PriceCache
 BYBIT_TESTNET_EXCHANGE = bool(os.getenv("BYBIT_TESTNET_EXCHANGE").lower() in ('true'))
 BYBIT_API_KEY = os.getenv("BYBIT_API_KEY")
 BYBIT_API_SECRET = os.getenv("BYBIT_API_SECRET")
+BYBIT_EXCHANGE_DOMAIN = "bytick"
 
 class WebsocketStreams:
 
@@ -18,8 +19,9 @@ class WebsocketStreams:
         self.trades_dao = trades_dao
         self.active_symbols = set()
         self.prices = {}
-        self.websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET, domain="bytick")
-
+        self.public_websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, domain=BYBIT_EXCHANGE_DOMAIN)
+        self.private_websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET, domain=BYBIT_EXCHANGE_DOMAIN)
+    
     def subscribe_to_price_stream(self, symbols: List[str]):
         for symbol in symbols:
             logging.info("Subscribing %s to price stream", symbol)
@@ -28,12 +30,12 @@ class WebsocketStreams:
         return self.active_symbols
     
     def subscribe(self, symbol):
-        self.websocket.instrument_info_stream(self.__handle_instrument_info, symbol)
+        self.public_websocket.instrument_info_stream(self.__handle_instrument_info, symbol)
 
     def start_position_listener(self):
-        self.websocket.position_stream(self.__handle_position_update)
-        self.websocket.stop_order_stream(self.__handle_stop_order_update)
-        self.websocket.order_stream(self.__handle_order_update)
+        self.private_websocket.position_stream(self.__handle_position_update)
+        self.private_websocket.stop_order_stream(self.__handle_stop_order_update)
+        self.private_websocket.order_stream(self.__handle_order_update)
 
     def __handle_instrument_info(self, message):
         try:
