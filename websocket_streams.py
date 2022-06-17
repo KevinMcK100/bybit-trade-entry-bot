@@ -18,7 +18,7 @@ class WebsocketStreams:
         self.trades_dao = trades_dao
         self.active_symbols = set()
         self.prices = {}
-        self.websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET)
+        self.websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET, domain="bytick")
 
     def subscribe_to_price_stream(self, symbols: List[str]):
         for symbol in symbols:
