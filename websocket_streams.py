@@ -11,6 +11,8 @@ BYBIT_TESTNET_EXCHANGE = bool(os.getenv("BYBIT_TESTNET_EXCHANGE").lower() in ('t
 BYBIT_API_KEY = os.getenv("BYBIT_API_KEY")
 BYBIT_API_SECRET = os.getenv("BYBIT_API_SECRET")
 BYBIT_EXCHANGE_DOMAIN = "bybit"
+# Retries set to 0 gives infinite retries
+RETRIES=0
 
 class WebsocketStreams:
 
@@ -19,7 +21,7 @@ class WebsocketStreams:
         self.trades_dao = trades_dao
         self.active_symbols = set()
         self.prices = {}
-        self.websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET, domain=BYBIT_EXCHANGE_DOMAIN)
+        self.websocket = usdt_perpetual.WebSocket(test=BYBIT_TESTNET_EXCHANGE, api_key=BYBIT_API_KEY, api_secret=BYBIT_API_SECRET, domain=BYBIT_EXCHANGE_DOMAIN, retries=RETRIES)
     
     def subscribe_to_price_stream(self, symbols: List[str]):
         for symbol in symbols:
